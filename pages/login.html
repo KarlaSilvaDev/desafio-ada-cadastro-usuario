@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="../styles/global.css" rel="stylesheet">
+    <link href="../styles/login.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-login flex items-center justify-center min-h-screen">
+    <div class="flex bg-fuchsia-100 rounded-xl shadow-xl w-full max-w-2xl">
+        <div class="p-8 w-full max-w-md text-center min-w-[50%]" >
+            <h1 class="text-2xl font-bold mb-6">Login</h1>
+          
+            <div class="text-left">
+                <label for="passwordLogin">Senha</label>
+                <input class="w-full p-3 border rounded mt-2 hover:border-fuchsia-500 focus:outline-none focus:border-fuchsia-600 focus:ring-1 focus:ring-fuchsia-600" type="password" id="passwordLogin" aria-errormessage="errorLoginPassword">
+                <span id="errorLoginPassword" class="text-red-500"></span>
+            </div>
+    
+            <button class="w-full bg-purple-600 text-white py-2 mt-8 rounded hover:bg-purple-700 hover:font-bold mb-3" id="btnLogin">Entrar</button>
+    
+            <button type="button" class="w-full border border-purple-600 text-purple-600 py-2 rounded hover:bg-purple-200 hover:font-bold" id="btnLoginVoltar">Voltar</button>
+        </div>
+        <div class="banner-login basis-1/2 rounded-xl rounded-l-none">
+        </div>
+    </div>
+    <script src="../scripts/login.js" type="module"></script>
+</body>
+</html>
