@@ -1,7 +1,7 @@
 const $ = (id) => document.getElementById(id);
 
 function showErrorMessage(fieldId, message) {
-    $(fieldId).textContent = message;
+    $(fieldId).innerHTML = `<span class="material-icons text-xl">error_outline</span> ${message}`;
 }
 
 export function clearAllErrorMessages(selector = ".text-red-500") {
@@ -21,6 +21,7 @@ export const REGEX = {
     cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
     password: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    noSpace: /^\S+$/,
 }
 
 export const Validators = {
@@ -28,6 +29,7 @@ export const Validators = {
     minLen: (n, msg = `O campo deve ter pelo menos ${n} caracteres`) => (value) => (value.length >= n ? "" : msg),
     noDigits: (msg = "O campo não pode conter números") => (value) => /\d/.test(value) ? msg : "",
     pattern: (regex, msg = "Formato inválido") => (value) => (regex.test(value) ? "" : msg),
+    passwordMatch: (password, msg = "A senha não é igual à informada no campo 'senha'") => (value) => (password === value ? "" : msg),
 }
 
 

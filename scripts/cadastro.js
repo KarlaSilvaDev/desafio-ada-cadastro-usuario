@@ -51,10 +51,20 @@ if (newUserForm) {
     const addressInput = $("address");
     const cpfInput = $("cpf");
     const passwordInput = $("password");
+    const passwordConfirmInput = $("passwordConfirm");
     const emailInput = $("email");
 
-    emailInput.value = localStorage.getItem("userEmail");
+    const emailLocalStorage = localStorage.getItem("userEmail");
 
+    if (emailLocalStorage) {
+        emailInput.value = emailLocalStorage;
+        emailInput.disabled = true;
+        emailInput.classList.remove("text-gray-700", "hover:border-fuchsia-500")
+        emailInput.classList.add("bg-gray-200", "text-gray-600")
+    } else {
+        emailInput.value = "";
+        emailInput.disabled = false;
+    }
 
     phoneNumberInput.addEventListener("input", (event) => {
         onInputPhoneNumber(event);
@@ -73,6 +83,8 @@ if (newUserForm) {
         const address = addressInput.value.trim();
         const cpf = cpfInput.value.trim();
         const password = passwordInput.value.trim();
+        const email = emailInput.value.trim();
+        const passwordConfirm = passwordConfirmInput.value;
 
         const valid = [
             validateField(
@@ -97,8 +109,18 @@ if (newUserForm) {
             ),
             validateField(
                 password,
-                [Validators.required(), Validators.pattern(REGEX.password, "A senha deve ter 8+ caracteres, pelo menos 1 letra maiúscula e 1 número")],
+                [Validators.required(), Validators.pattern(REGEX.noSpace, "A senha não deve conter espaços"), Validators.pattern(REGEX.password, "A senha deve ter 8+ caracteres, pelo menos 1 letra maiúscula e 1 número")],
                 "errorPassword"
+            ),
+            validateField(
+                passwordConfirm,
+                [Validators.required(), Validators.passwordMatch(password), Validators.pattern(REGEX.noSpace, "A senha não deve conter espaços"), Validators.pattern(REGEX.password, "A senha deve ter 8+ caracteres, pelo menos 1 letra maiúscula e 1 número")],
+                "errorPasswordConfirm"
+            ),
+            validateField(
+                email,
+                [Validators.required(), Validators.pattern(REGEX.email, "Email inválido")],
+                "errorEmail"
             )
         ].every(Boolean);
 
@@ -108,17 +130,41 @@ if (newUserForm) {
     })
 }
 
-$('btnCadastroVoltar').addEventListener("click", () => { window.location.href = "./index.html" })
-
 //Função para coletar os Ids do form de cadastro de usuário
 const idsInputsForm = Array.from(newUserForm.elements)
     .filter(element => element.type !== 'submit' && element.type !== 'button')
     .map(element => element.id)
     .filter(Boolean);
 
+
+function togglePassword(inputId, iconId) {
+    const input = $(inputId);
+    const icon = $(iconId);
+
+    if (input.type === "password") {
+        input.type = "text";
+        icon.innerHTML = 'visibility';
+    } else {
+        input.type = "password";
+        icon.innerHTML = 'visibility_off';
+    }
+}
+
+/*******************
+ * EVENT LISTENERS
+ *******************/
+$('btnCadastroVoltar').addEventListener("click", () => { window.location.href = "./index.html" })
+$('btnTogglePassword').addEventListener("click", () => { togglePassword('password', 'togglePasswordIcon') });
+$('btnTogglePasswordConfirm').addEventListener("click", () => { togglePassword('passwordConfirm', 'togglePasswordConfirmIcon') });
+$('btnRegisterUser').addEventListener("click", () => { console.log("Implementar lógica de cadastro") })
+
+//Event Listener em cada input do Form
 idsInputsForm.forEach((id) => {
     const element = $(id);
     if (!element) return;
 
-    element.addEventListener('48focusin', () => { clearFieldErrorMessage(`error${id.charAt(0).toUpperCase() + id.slice(1)}`) })
+    element.addEventListener('focusin', () => { clearFieldErrorMessage(`error${id.charAt(0).toUpperCase() + id.slice(1)}`) })
 })
+
+
+
