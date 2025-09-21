@@ -1,6 +1,6 @@
 # CaixaVerso - Desafio Módulo 2 (ADA)
 
-Este projeto foi desenvolvido como parte do **Desafio do Módulo 2 da trilha Full Stack da ADA**.  
+Este projeto foi desenvolvido como parte do **Desafio do Módulo 2 da trilha Front-end da ADA** no **CaixaVerso**.  
 O objetivo é implementar o **frontend** de um sistema de autenticação e gerenciamento de usuários consumindo uma **API já fornecida pelo professor**.
 
 ---
