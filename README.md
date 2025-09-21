@@ -35,9 +35,11 @@ src/
  ├── services/            # Regras de negócio
  │    ├── loginService.js
  │    └── usersService.js
+ │    └── validationService.js
  └── utils/               # Funções auxiliares
       ├── validators.js
-      └── domUtils.js
+      └── masks.js
+      └── formHelpers.js
 ```
 
 ## ⚙️ Funcionalidades
