@@ -29,7 +29,7 @@ $('btnLogin')?.addEventListener('click', async (event) => {
     try {
         await loginService.login(email, password);
 
-        window.location.href = "../pages/profile.html"
+        window.location.href = "./profile.html"
     } catch (error) {
         showErrorMessage("errorPasswordLogin", error.message);
         clearField("passwordLogin");
@@ -41,4 +41,3 @@ $('btnCreateAccount')?.addEventListener("click", () => {
 });
 $('btnTogglePasswordLogin')?.addEventListener("click", () => { togglePassword('passwordLogin', 'togglePasswordLoginIcon') });
 $('btnLoginVoltar')?.addEventListener('click', () => { window.location.href = './index.html' });
-

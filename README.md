@@ -6,6 +6,7 @@ O objetivo é implementar o **frontend** de um sistema de autenticação e geren
 ---
 
 ## 🚀 Tecnologias Utilizadas
+
 - **HTML5**  
 - **CSS3** (TailwindCSS + estilos próprios)  
 - **JavaScript (ES Modules)**  
@@ -27,17 +28,18 @@ src/
  │         ├── cadastro.js
  │         ├── login.js
  │         └── index.js
- ├── pages/               # Páginas HTML
- │    ├── index.html
- │    ├── login.html
- │    ├── cadastro.html
- │    └── profile.html
+ |
  ├── services/            # Regras de negócio
  │    ├── loginService.js
  │    └── usersService.js
  └── utils/               # Funções auxiliares
-      ├── validators.js
-      └── domUtils.js
+ |     ├── validators.js
+ |     └── domUtils.js
+ └── index.html  
+ └── login.html  
+ └── cadastro.html  
+ └── profile.html  
+
 ```
 
 ## ⚙️ Funcionalidades
@@ -74,13 +76,17 @@ src/
 ## 📦 Como Rodar o Projeto Localmente
 
 1. Clone este repositório:  
+
 ```bash
 git clone https://github.com/seu-usuario/caixaverso-ada-desafio2.git
 ```
+
 2. Entre na pasta do projeto:
+
 ```bash
 cd caixaverso-ada-desafio2 
 ```
+
 3. Abra o arquivo index.html no navegador (ou utilize uma extensão como Live Server do VS Code para simular um servidor local).
 
 > ⚠️ O backend já está disponível em:  
@@ -94,5 +100,3 @@ cd caixaverso-ada-desafio2
 - Melhor experiência de edição de inputs com máscara (telefone e CPF)  
 - Estilização aprimorada da página de perfil  
 - Permitir a edição dos dados do usuário logado
-
-

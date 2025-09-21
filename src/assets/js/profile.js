@@ -17,13 +17,13 @@ async function loadProfile() {
     } catch (error) {
         alert("Erro ao carregar perfil.");
         sessionStorage.clear();
-        window.location.href = "../pages/index.html"
+        window.location.href = "./index.html"
     }
 }
 
 $("btnLogout")?.addEventListener("click", () => {
     sessionStorage.clear();
-    window.location.href = "../pages/index.html";
+    window.location.href = "./index.html";
 });
 
 $("btnDelete")?.addEventListener("click", async () => {
@@ -34,7 +34,7 @@ $("btnDelete")?.addEventListener("click", async () => {
         await deleteUserProfile(userId);
         alert("Usuário deletado com sucesso!");
         sessionStorage.clear();
-        window.location.href = "../pages/index.html";
+        window.location.href = "./index.html";
     } catch (error) {
         alert(error.message);
     }
