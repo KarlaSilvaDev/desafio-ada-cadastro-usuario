@@ -1,6 +1,6 @@
 # CaixaVerso - Desafio Módulo 2 (ADA)
 
-Este projeto foi desenvolvido como parte do **Desafio do Módulo 2 da trilha Full Stack da ADA**.  
+Este projeto foi desenvolvido como parte do **Desafio do Módulo 2 da trilha Front-end da ADA** no **CaixaVerso**.  
 O objetivo é implementar o **frontend** de um sistema de autenticação e gerenciamento de usuários consumindo uma **API já fornecida pelo professor**.
 
 ---
@@ -21,6 +21,7 @@ O objetivo é implementar o **frontend** de um sistema de autenticação e geren
 src/
  ├── apis/                # Camada de comunicação com a API (fetch)
  │    └── users.js
+ |
  ├── assets/              # Arquivos estáticos
  │    ├── css/            # Estilos
  │    ├── img/            # Imagens
@@ -32,14 +33,19 @@ src/
  ├── services/            # Regras de negócio
  │    ├── loginService.js
  │    └── usersService.js
+ │    └── validationService.js
+ |
  └── utils/               # Funções auxiliares
- |     ├── validators.js
- |     └── domUtils.js
+ |    ├── validators.js
+ |    └── masks.js
+ |    └── formHelpers.js
+ |
  └── index.html  
  └── login.html  
  └── cadastro.html  
  └── profile.html  
 
+      
 ```
 
 ## ⚙️ Funcionalidades
@@ -68,7 +74,7 @@ src/
 
 3. Usuário acessa a página **profile.html**, onde pode:  
    - Visualizar seus dados (GET `/users`)  
-   - Atualizar informações (PUT `/users/:id`)  
+   - Atualizar informações (PUT `/users/:id`)  **Essa funcionalidade ainda não foi implementada**
    - Deletar a conta (DELETE `/users/:id`)  
 
 ---
