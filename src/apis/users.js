@@ -1,9 +1,20 @@
-// const API_BASE = "http://localhost:3000/api";
+const API_BASE_LOCAL = "http://localhost:3000/api";
 const API_BASE_DEPLOY = "https://api-desafio-modulo-2-ada.onrender.com/api";
 
+
+async function getApiBase() {
+    try {
+        const response = await fetch(`${API_BASE_LOCAL}/health`, { method: "GET" });
+        if (response.ok) { return API_BASE_LOCAL };
+    } catch (error) {
+        console.error("A aplicação não está rodando localmente.")
+    }
+    return API_BASE_DEPLOY;
+}
 export async function getUserByEmail(email) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/users/validate-email?email=${encodeURIComponent(email)}`);
+        const base = await getApiBase();
+        const response = await fetch(`${base}/users/validate-email?email=${encodeURIComponent(email)}`);
 
         if (response.status === 204) { return { userExists: false } };
         if (response.status === 409) { return { userExists: true } };
@@ -17,7 +28,8 @@ export async function getUserByEmail(email) {
 
 export async function createUser(userData) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/users`, {
+        const base = await getApiBase();
+        const response = await fetch(`${base}/users`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(userData)
@@ -36,7 +48,8 @@ export async function createUser(userData) {
 
 export async function login(email, senha) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/login`, {
+        const base = await getApiBase();
+        const response = await fetch(`${base}/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, senha })
@@ -59,7 +72,8 @@ export async function login(email, senha) {
 
 export async function getUser(token) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/users`, {
+        const base = await getApiBase();
+        const response = await fetch(`${base}/users`, {
             headers: {
                 "Authorization": `Bearer ${token}`
             }
@@ -78,7 +92,8 @@ export async function getUser(token) {
 
 export async function updateUser(id, token, userData) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/users/${id}`, {
+        const base = await getApiBase();
+        const response = await fetch(`${base}/users/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -100,7 +115,8 @@ export async function updateUser(id, token, userData) {
 
 export async function deleteUser(id, token) {
     try {
-        const response = await fetch(`${API_BASE_DEPLOY}/users/${id}`, {
+        const base = await getApiBase();
+        const response = await fetch(`${base}/users/${id}`, {
             method: "DELETE",
             headers: { "Authorization": `Bearer ${token}` }
         });
