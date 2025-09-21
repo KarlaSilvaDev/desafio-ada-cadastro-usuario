@@ -1,0 +1,6 @@
+.bg-profile {
+    background: linear-gradient(rgba(124, 62, 150, 0.9), rgba(61, 0, 92, 1)), url('../img/bg-cadastro.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+}

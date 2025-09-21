@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DESAFIO - Perfil</title>
+        <link rel="icon" type="image/png" href="https://img.icons8.com/?size=100&id=48342&format=png&color=000000">
+        <link href="../assets/css/global.css" rel="stylesheet">
+        <link href="../assets/css/profile.css" rel="stylesheet">
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="relative bg-profile flex flex-col items-center min-h-screen">
+        <main class="relative flex flex-col bg-white rounded-xl shadow-xl w-full max-w-3xl my-20 p-8">
+            <h1 class="text-2xl font-bold mb-6 text-center text-fuchsia-900">Meu perfil</h1>
+
+            <div id="profileIntro" class="grid grid-cols-1 md:grid-cols-1 gap-6 text-gray-700">
+                <div>
+                    <p class="font-semibold">Nome:</p>
+                    <p id="profileName" class="text-fuchsia-700"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">Email:</p>
+                    <p id="profileEmail" class="text-fuchsia-700"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">CPF:</p>
+                    <p id="profileCpf" class="text-fuchsia-700"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">Telefone:</p>
+                    <p id="profilePhoneNumber" class="text-fuchsia-700"></p>
+                </div>
+                <div>
+                    <p class="font-semibold">Endereço:</p>
+                    <p id="profileAddress" class="text-fuchsia-700"></p>
+                </div>
+            </div>
+
+            <button id="btnLogout" class="absolute top-5 right-8 border border-red-500 text-red-500 px-8 py-2 rounded hover:bg-red-100 hover:font-bold transition">
+                Sair
+            </button>
+            <div class=" flex justify-end mt-10 gap-3">
+                <!-- <button id="btnUpdate" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 hover:font-bold ">
+                    Editar Dados
+                </button> -->
+                <button id="btnDelete" class="border border-purple-600 text-purple-600 px-4 py-2 rounded hover:bg-purple-200 hover:font-bold">
+                    Excluir Conta
+                </button>
+            </div>
+
+        </main>
+        
+        <footer class="flex items-center justify-center w-full absolute bottom-0 h-12">
+            <span class="text-sm text-gray-950 font-light text-purple-400">Projeto desenvolvido pelo Grupo 5 - CaixaVerso 2025</span>
+        </footer>
+        
+        <script src="../assets/js/profile.js" type="module"></script>
+    </body>
+</html>

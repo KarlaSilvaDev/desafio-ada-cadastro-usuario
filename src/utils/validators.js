@@ -1,21 +1,3 @@
-const $ = (id) => document.getElementById(id);
-
-function showErrorMessage(fieldId, message) {
-    $(fieldId).innerHTML = `<span class="material-icons text-xl">error_outline</span> ${message}`;
-}
-
-export function clearAllErrorMessages(selector = ".text-red-500") {
-    document.querySelectorAll(selector).forEach(element => element.textContent = "");
-}
-
-export function clearFieldErrorMessage(errorMessageId) {
-    $(errorMessageId).textContent = "";
-}
-
-/*******************
- * VALIDAÇÕES
- *******************/
-
 export const REGEX = {
     phoneNumber: /^\(\d{2}\)\s\d\s\d{4}-\d{4}$/,
     cpf: /^\d{3}\.\d{3}\.\d{3}-\d{2}$/,
@@ -33,14 +15,11 @@ export const Validators = {
 }
 
 
-export function validateField(value, rules, errorFieldId) {
+export function validateField(value, rules) {
     for (const rule of rules) {
         const error = rule(value);
-        if (error) {
-            showErrorMessage(errorFieldId, error);
-            return false;
-        }
+        if (error) { return error };
     }
-    return true;
+    return null;
 }
 
