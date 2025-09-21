@@ -68,7 +68,7 @@ src/
 
 3. Usuário acessa a página **profile.html**, onde pode:  
    - Visualizar seus dados (GET `/users`)  
-   - Atualizar informações (PUT `/users/:id`)  
+   - Atualizar informações (PUT `/users/:id`)  **Essa funcionalidade ainda não foi implementada**
    - Deletar a conta (DELETE `/users/:id`)  
 
 ---
