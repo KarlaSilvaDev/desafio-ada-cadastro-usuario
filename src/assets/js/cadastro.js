@@ -75,7 +75,7 @@ form?.addEventListener("submit", async (event) => {
 
     if (hasErrors) {
         Object.entries(errors).forEach(([fieldId, message]) => {
-            if (message !== null) {showErrorMessage(fieldId, message)};
+            if (message !== null) { showErrorMessage(fieldId, message) };
         });
 
         return;
@@ -90,7 +90,7 @@ form?.addEventListener("submit", async (event) => {
 });
 
 
-$('btnCadastroVoltar').addEventListener("click", () => { window.location.href = "../index.html" })
+$('btnCadastroVoltar').addEventListener("click", () => { window.location.href = "./index.html" })
 $('btnTogglePassword').addEventListener("click", () => { togglePassword('password', 'togglePasswordIcon') });
 $('btnTogglePasswordConfirm').addEventListener("click", () => { togglePassword('passwordConfirm', 'togglePasswordConfirmIcon') });
 
