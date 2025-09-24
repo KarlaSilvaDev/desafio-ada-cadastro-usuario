@@ -53,8 +53,6 @@ form?.addEventListener("submit", async (event) => {
         await usersService.registerUser(formData, true);
         window.location.href = "./profile.html"
     } catch (error) {
-        console.error(error);
-
         if (error.message.toLowerCase().includes("email")) {
             showErrorMessage("errorEmail", error.message);
         }
@@ -62,8 +60,6 @@ form?.addEventListener("submit", async (event) => {
         if (error.message.toLowerCase().includes("cpf")) {
             showErrorMessage("errorCpf", error.message);
         }
-
-        console.log(error)
     }
 }
 );
@@ -78,7 +74,6 @@ Array.from(form.elements)
     .filter((element) => element.type !== "submit" && element.type !== "button")
     .forEach((element) => {
         element.addEventListener("focusin", () => {
-            console.log("teste")
             clearFieldErrorMessage(`error${capitalize(element.id)}`)
         });
     });

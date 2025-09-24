@@ -1,36 +1,71 @@
 import { deleteUserProfile } from "../../services/usersService.js"
 import { validateForm } from "../../utils/validateForm.js";
 import { formRules } from "../../utils/formRules.js";
-import { clearAllErrorMessages, clearFieldErrorMessage } from "../../utils/formHelpers.js";
+import { clearAllErrorMessages, clearFieldErrorMessage, showErrorMessage } from "../../utils/formHelpers.js";
 import { onInputCpf, onInputPhoneNumber } from "../../utils/masks.js";
 import * as usersService from "../../services/usersService.js"
 
 const $ = (id) => document.getElementById(id);
 
-async function loadProfile() {
-    try {
-        const user = await usersService.getUserProfile();
+let userData;
+let originalProfileHTML = "";
 
-        $("profileName").textContent = user.nome || "Não cadastrado";
-        $("profileEmail").textContent = user.email || "Não cadastrado";
-        $("profileCpf").textContent = user.cpf || "Não cadastrado";
-        $("profilePhoneNumber").textContent = user.telefone || "Não cadastrado";
-        $("profileAddress").textContent = user.endereco || "Não cadastrado";
+function setProfileData(userData) {
+  const fields = {
+    profileName: userData.nome,
+    profileEmail: userData.email,
+    profileCpf: userData.cpf,
+    profilePhoneNumber: userData.telefone,
+    profileAddress: userData.endereco,
+  };
 
-        sessionStorage.setItem("userId", user.id);
-
-        $('btnEdit')?.addEventListener('click', () => abrirFormEdicao(user));
-    } catch (error) {
-        alert("Erro ao carregar perfil.");
-        sessionStorage.clear();
-        window.location.href = "./index.html"
-    }
+  Object.entries(fields).forEach(([id, value]) => {
+    $(id).textContent = value || "Não cadastrado";
+  })
 }
 
-function abrirFormEdicao(user) {
-    const container = $("profileData");
+function setFormData(userData) {
+  $("name").value = userData.nome || "";
+  $("email").value = userData.email || "";
+  $("cpf").value = userData.cpf || "";
+  $("phoneNumber").value = userData.telefone || "";
+  $("address").value = userData.endereco || "";
+}
 
-    container.innerHTML = `
+function handleErrorUpdateUser(error) {
+  const message = error.message.toLowerCase();
+  if (message.includes("email")) {
+    return showErrorMessage("errorEmail", error.message);
+  }
+
+  if (message.toLowerCase().includes("cpf")) {
+    return showErrorMessage("errorCpf", error.message);
+  }
+
+  alert(error.message)
+}
+
+async function loadProfile() {
+  try {
+    const container = $("profileData");
+    userData = await usersService.getUserProfile();
+    originalProfileHTML = container.innerHTML;
+
+    setProfileData(userData);
+    sessionStorage.setItem("userId", userData.id);
+
+    $('btnEdit')?.addEventListener('click', () => abrirFormEdicao(userData));
+  } catch (error) {
+    alert("Erro ao carregar perfil.");
+    sessionStorage.clear();
+    window.location.href = "./index.html"
+  }
+}
+
+function abrirFormEdicao() {
+  const container = $("profileData");
+
+  container.innerHTML = `
        <form id="formEdit" class="flex flex-col gap-5">
             <div>
               <label for="name" class="block text-gray-700">Nome *</label>
@@ -116,73 +151,78 @@ function abrirFormEdicao(user) {
             </div>
           </form>`;
 
+  setFormData(userData);
 
-    $('phoneNumber').addEventListener("input", onInputPhoneNumber);
-    $("cpf").addEventListener("input", onInputCpf);
+  $('phoneNumber').addEventListener("input", onInputPhoneNumber);
+  $("cpf").addEventListener("input", onInputCpf);
 
-    $("formEdit")?.addEventListener("submit", async (event) => {
-        event.preventDefault();
-        clearAllErrorMessages();
+  $("formEdit")?.addEventListener("submit", onFormSubmit);
+  $("btnCancelUpdate")?.addEventListener("click", restoreProfileView);
 
-        const formData = {
-            name: $("name").value.trim(),
-            phoneNumber: $("phoneNumber").value.trim(),
-            address: $("address").value.trim(),
-            email: $("email").value.trim(),
-            cpf: $("cpf").value.trim(),
-        };
-
-        const isValid = validateForm(formData, formRules.update);
-        if (!isValid) { return; }
-
-        try {
-            const userId = sessionStorage.getItem("userId");
-            await usersService.updateUserProfile(userId, {
-                nome: formData.name,
-                telefone: formData.phoneNumber,
-                endereco: formData.address,
-                email: formData.email,
-                cpf: formData.cpf
-            });
-
-            alert("Dados atualizados com sucesso!")
-            window.location.reload();
-        } catch (error) {
-            alert(error.message);
-        }
+  Array.from($("formEdit").elements)
+    .filter((element) => element.type !== "submit" && element.type !== "button")
+    .forEach((element) => {
+      element.addEventListener("focusin", () => {
+        clearFieldErrorMessage(`error${capitalize(element.id)}`)
+      });
     });
-
-    Array.from($("formEdit").elements)
-        .filter((element) => element.type !== "submit" && element.type !== "button")
-        .forEach((element) => {
-            element.addEventListener("focusin", () => {
-                console.log("teste")
-                clearFieldErrorMessage(`error${capitalize(element.id)}`)
-            });
-        });
-
-    $("btnCancelUpdate")?.addEventListener("click", () => window.location.reload());
 }
 
 
 $("btnLogout")?.addEventListener("click", () => {
-    sessionStorage.clear();
-    window.location.href = "./index.html";
+  sessionStorage.clear();
+  window.location.href = "./index.html";
 });
 
 $("btnDelete")?.addEventListener("click", async () => {
-    if (!confirm("Tem certeza que deseja excluir sua conta?")) { return };
+  if (!confirm("Tem certeza que deseja excluir sua conta?")) { return };
 
-    try {
-        const userId = sessionStorage.getItem("userId");
-        await deleteUserProfile(userId);
-        alert("Usuário deletado com sucesso!");
-        sessionStorage.clear();
-        window.location.href = "./index.html";
-    } catch (error) {
-        alert(error.message);
-    }
+  try {
+    const userId = sessionStorage.getItem("userId");
+    await deleteUserProfile(userId);
+    sessionStorage.clear();
+    window.location.href = "./index.html";
+  } catch (error) {
+    alert(error.message);
+  }
 });
 
 
 loadProfile();
+
+async function onFormSubmit(event) {
+  event.preventDefault();
+  clearAllErrorMessages();
+
+  const formData = {
+    name: $("name").value.trim(),
+    phoneNumber: $("phoneNumber").value.trim(),
+    address: $("address").value.trim(),
+    email: $("email").value.trim(),
+    cpf: $("cpf").value.trim(),
+  };
+
+  const isValid = validateForm(formData, formRules.update);
+  if (!isValid) { return; }
+
+  try {
+    await usersService.updateUserProfile({
+      id: userData.id,
+      nome: formData.name,
+      telefone: formData.phoneNumber,
+      endereco: formData.address,
+      email: formData.email,
+      cpf: formData.cpf
+    });
+
+    window.location.reload();
+  } catch (error) {
+    handleErrorUpdateUser(error);
+  }
+}
+
+function restoreProfileView() {
+  const container = $("profileData");
+  container.innerHTML = originalProfileHTML;
+  setProfileData(userData);
+}
