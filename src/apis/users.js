@@ -37,6 +37,8 @@ export async function createUser(userData) {
 
         if (!response.ok) {
             const error = await response.json();
+            console.log(response)
+
             throw new Error(error.error || "Falha ao criar usuário");
         }
 
@@ -45,6 +47,8 @@ export async function createUser(userData) {
         throw new Error(error.message || "Falha na conexão com o servidor");
     }
 }
+
+
 
 export async function login(email, senha) {
     try {

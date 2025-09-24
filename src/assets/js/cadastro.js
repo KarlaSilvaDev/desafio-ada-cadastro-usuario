@@ -1,7 +1,8 @@
 import * as usersService from "../../services/usersService.js";
-import { Validators, validateField, REGEX } from "../../utils/validators.js";
-import { onInputPhoneNumber, onInputCpf } from "../../utils/masks.js"
-import { togglePassword, clearAllErrorMessages, showErrorMessage, clearFieldErrorMessage } from "../../utils/formHelpers.js"
+import { clearAllErrorMessages, clearFieldErrorMessage, showErrorMessage, togglePassword } from "../../utils/formHelpers.js";
+import { formRules } from "../../utils/formRules.js";
+import { onInputCpf, onInputPhoneNumber } from "../../utils/masks.js";
+import { validateForm } from "../../utils/validateForm.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -32,62 +33,40 @@ form?.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearAllErrorMessages();
 
-    const name = nameInput.value.trim();
-    const phoneNumber = phoneNumberInput.value.trim();
-    const address = addressInput.value.trim();
-    const cpf = cpfInput.value.trim();
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-    const passwordConfirm = passwordConfirmInput.value;
+    const formData = {
+        name: nameInput.value.trim(),
+        phoneNumber: phoneNumberInput.value.trim(),
+        address: addressInput.value.trim(),
+        cpf: cpfInput.value.trim(),
+        email: emailInput.value.trim(),
+        password: passwordInput.value.trim(),
+        passwordConfirm: passwordConfirmInput.value.trim(),
+    }
 
-    const errors = {
-        errorName: validateField(
-            name,
-            [Validators.required(), Validators.noDigits("O nome não pode conter números"), Validators.minLen(3, "O campo nome deve ter no mínimo 3 caracteres")],
-        ),
-        errorPhoneNumber: validateField(
-            phoneNumber,
-            [Validators.required(), Validators.pattern(REGEX.phoneNumber, "Telefone inválido")],
-        ),
-        errorAddress: validateField(
-            address,
-            [Validators.required(), Validators.minLen(3, "O campo endereço deve ter no mínimo 3 caracteres")],
-        ),
-        errorCpf: validateField(
-            cpf,
-            [Validators.required(), Validators.pattern(REGEX.cpf, "CPF inválido")],
-        ),
-        errorPassword: validateField(
-            password,
-            [Validators.required(), Validators.pattern(REGEX.noSpace, "A senha não deve conter espaços"), Validators.pattern(REGEX.password, "A senha deve ter 8+ caracteres, pelo menos 1 letra maiúscula e 1 número")],
-        ),
-        errorPasswordConfirm: validateField(
-            passwordConfirm,
-            [Validators.required(), Validators.passwordMatch(password), Validators.pattern(REGEX.noSpace, "A senha não deve conter espaços"), Validators.pattern(REGEX.password, "A senha deve ter 8+ caracteres, pelo menos 1 letra maiúscula e 1 número")],
-        ),
-        errorEmail: validateField(
-            email,
-            [Validators.required(), Validators.pattern(REGEX.email, "Email inválido")],
-        )
-    };
+    const isValid = validateForm(formData, formRules.registration);
 
-    const hasErrors = Object.values(errors).some(message => message);
-
-    if (hasErrors) {
-        Object.entries(errors).forEach(([fieldId, message]) => {
-            if (message !== null) { showErrorMessage(fieldId, message) };
-        });
-
+    if (!isValid) {
         return;
-    };
+    }
 
     try {
-        await usersService.registerUser({ name, phoneNumber, address, email, cpf, password }, true);
+        await usersService.registerUser(formData, true);
         window.location.href = "./profile.html"
     } catch (error) {
         console.error(error);
+
+        if (error.message.toLowerCase().includes("email")) {
+            showErrorMessage("errorEmail", error.message);
+        }
+
+        if (error.message.toLowerCase().includes("cpf")) {
+            showErrorMessage("errorCpf", error.message);
+        }
+
+        console.log(error)
     }
-});
+}
+);
 
 
 $('btnCadastroVoltar').addEventListener("click", () => { window.location.href = "./index.html" })
